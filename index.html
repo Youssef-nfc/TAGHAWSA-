@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TAGHAWSA STORE | ملابس جاهزة للرجال</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800;900&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans Arabic',sans-serif;background:#0a0a0a;color:#fff;overflow-x:hidden;scroll-behavior:smooth}
+:root{--gold:#c9a227;--gold-d:#a88420;--dark:#0a0a0a;--card-bg:#141414}
+
+/* ===== NFC SPLASH SCREEN ===== */
+#nfc-splash{position:fixed;inset:0;background:#0a0a0a;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease,visibility .8s ease}
+#nfc-splash.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.nfc-logo{width:160px;height:160px;border-radius:50%;padding:5px;background:linear-gradient(135deg,var(--gold),#fff,var(--gold));box-shadow:0 0 50px rgba(201,162,39,.6),0 0 100px rgba(201,162,39,.2);animation:pulseGlow 2s ease-in-out infinite;margin-bottom:35px}
+.nfc-logo img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#111;display:block}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 40px rgba(201,162,39,.4),0 0 80px rgba(201,162,39,.15)}50%{box-shadow:0 0 70px rgba(201,162,39,.8),0 0 140px rgba(201,162,39,.35)}}
+.nfc-text{font-size:26px;font-weight:900;color:var(--gold);letter-spacing:2px;margin-bottom:25px;text-shadow:0 0 20px rgba(201,162,39,.4)}
+.nfc-bar{width:180px;height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.nfc-bar-inner{width:0%;height:100%;background:linear-gradient(90deg,var(--gold),#fff,var(--gold));border-radius:2px;animation:loadBar 2.2s ease forwards}
+@keyframes loadBar{0%{width:0%}50%{width:70%}100%{width:100%}}
+
+/* ===== NAVIGATION ===== */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:65px;padding:0 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(201,162,39,.15)}
+.logo{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;letter-spacing:2px;color:#fff;text-decoration:none}
+.logo img{width:38px;height:38px;border-radius:10px;object-fit:cover;border:2px solid var(--gold)}
+.nav-right{display:flex;align-items:center;gap:14px}
+.menu-btn,.ic-btn{background:none;border:none;cursor:pointer;padding:10px;display:flex;align-items:center;justify-content:center;color:#fff;border-radius:10px;transition:.3s}
+.menu-btn:hover,.ic-btn:hover{background:rgba(201,162,39,.12);color:var(--gold)}
+.badge{position:absolute;top:-2px;left:-2px;width:18px;height:18px;background:var(--gold);color:#000;font-size:10px;font-weight:900;border-radius:50%;display:flex;align-items:center;justify-content:center}
+
+/* ===== DRAWER ===== */
+.drawer-bg{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:2500;opacity:0;visibility:hidden;transition:.3s}
+.drawer-bg.open{opacity:1;visibility:visible}
+.drawer{position:fixed;top:0;right:0;width:300px;max-width:85vw;height:100%;background:#111;z-index:2501;transform:translateX(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);padding:28px 22px;display:flex;flex-direction:column;justify-content:space-between;border-left:2px solid var(--gold)}
+.drawer.open{transform:translateX(0)}
+.drawer-header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,162,39,.25);padding-bottom:18px}
+.drawer-close{background:none;border:none;color:#fff;cursor:pointer;padding:8px;transition:.3s}
+.drawer-close:hover{color:var(--gold);transform:rotate(90deg)}
+.drawer-menu{list-style:none;margin-top:35px;display:flex;flex-direction:column;gap:6px}
+.drawer-menu a{color:#bbb;text-decoration:none;font-size:16px;font-weight:700;display:block;padding:14px 16px;border-radius:12px;transition:.3s;border-right:3px solid transparent}
+.drawer-menu a:hover,.drawer-menu a.highlight{color:var(--gold);background:rgba(201,162,39,.08);border-right-color:var(--gold)}
+.drawer-menu a.highlight{background:rgba(201,162,39,.12)}
+
+/* ===== PROFILE HEADER ===== */
+.profile-header{margin-top:65px;position:relative;text-align:center;padding-bottom:30px}
+.banner-container{width:100%;height:320px;background:linear-gradient(135deg,#1a1a1a,#0d0d0d);position:relative;overflow:hidden}
+.banner-container::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(10,10,10,.9) 100%)}
+.banner-img{width:100%;height:100%;object-fit:cover}
+.avatar-wrap{position:relative;margin-top:-75px;display:flex;flex-direction:column;align-items:center;z-index:10}
+.avatar-ring{width:150px;height:150px;border-radius:50%;padding:4px;background:linear-gradient(135deg,var(--gold),#fff,var(--gold));box-shadow:0 8px 30px rgba(0,0,0,.6),0 0 25px rgba(201,162,39,.25);position:relative}
+.avatar-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#111;display:block}
+.verified-badge{position:absolute;bottom:8px;left:8px;width:28px;height:28px;background:#0095f6;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #0a0a0a;box-shadow:0 2px 8px rgba(0,0,0,.4);z-index:20}
+.verified-badge svg{width:16px;height:16px;color:#fff}
+.store-title{font-size:28px;font-weight:900;letter-spacing:1px;margin-top:18px;color:#fff}
+.store-handle{color:var(--gold);font-size:15px;font-weight:600;margin-top:6px;letter-spacing:.5px}
+.store-bio{font-size:14px;color:#aaa;max-width:420px;margin:14px auto 0;padding:0 24px;line-height:1.9}
+.store-bio .emoji{font-size:16px;vertical-align:middle;margin:0 3px}
+.stats-row{display:flex;justify-content:center;gap:50px;margin-top:24px;padding:18px 0;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);max-width:500px;margin-left:auto;margin-right:auto}
+.stat-item{text-align:center}
+.stat-num{font-size:22px;font-weight:900;color:var(--gold);display:block}
+.stat-label{font-size:12px;color:#777;margin-top:4px;font-weight:600}
+.action-btns{display:flex;justify-content:center;gap:12px;margin-top:22px;padding:0 20px;flex-wrap:wrap}
+.btn{padding:13px 28px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:inherit;transition:.3s}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#000;box-shadow:0 4px 18px rgba(201,162,39,.25)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(201,162,39,.4)}
+.btn-outline{background:transparent;border:2px solid rgba(255,255,255,.15);color:#fff}
+.btn-outline:hover{border-color:var(--gold);background:rgba(201,162,39,.08);transform:translateY(-2px)}
+
+/* ===== MARQUEE ===== */
+.marquee{background:linear-gradient(90deg,var(--gold),var(--gold-d));padding:11px 0;overflow:hidden;margin-top:28px;position:relative}
+.marquee::before,.marquee::after{content:'';position:absolute;top:0;width:60px;height:100%;z-index:2}
+.marquee::before{left:0;background:linear-gradient(to right,var(--gold),transparent)}
+.marquee::after{right:0;background:linear-gradient(to left,var(--gold-d),transparent)}
+.m-track{display:flex;gap:50px;animation:marquee 22s linear infinite;white-space:nowrap}
+.m-item{display:flex;align-items:center;gap:10px;font-weight:800;font-size:13px;color:#000;flex-shrink:0}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ===== GALLERY TRIGGER CARD ===== */
+.gallery-card-sec{padding:30px 18px;max-width:550px;margin:0 auto}
+.gallery-trigger-card{background:linear-gradient(135deg,#161616,#101010);border:1.5px solid rgba(201,162,39,.3);border-radius:20px;padding:22px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .35s ease;box-shadow:0 8px 25px rgba(0,0,0,.5);position:relative;overflow:hidden}
+.gallery-trigger-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 35px rgba(201,162,39,.2);background:linear-gradient(135deg,#1c1c1c,#121212)}
+.gallery-card-info{display:flex;align-items:center;gap:16px}
+.gallery-icon-box{width:54px;height:54px;border-radius:14px;background:rgba(201,162,39,.12);border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;color:var(--gold);flex-shrink:0}
+.gallery-text-box h3{font-size:18px;font-weight:900;color:#fff;margin-bottom:4px}
+.gallery-text-box p{font-size:12px;color:#aaa;font-weight:600}
+.gallery-preview-thumbs{display:flex;align-items:center;gap:-8px}
+.thumb-mini{width:38px;height:38px;border-radius:50%;border:2px solid #0a0a0a;object-fit:cover;margin-left:-12px;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.thumb-count{width:38px;height:38px;border-radius:50%;border:2px solid #0a0a0a;background:var(--gold);color:#000;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;margin-left:-12px;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+
+/* ===== FULLSCREEN LIGHTBOX & MODAL ===== */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.95);backdrop-filter:blur(15px);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:.4s ease;padding:20px}
+.lightbox.active{opacity:1;visibility:visible}
+.lightbox-content{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:800px;height:100%}
+.lightbox-img{max-width:92vw;max-height:75vh;border-radius:18px;border:2px solid rgba(201,162,39,.4);box-shadow:0 0 50px rgba(0,0,0,.9);object-fit:contain;transform:scale(.9);transition:transform .4s ease}
+.lightbox.active .lightbox-img{transform:scale(1)}
+.lightbox-close{position:absolute;top:20px;right:20px;width:45px;height:45px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;z-index:10}
+.lightbox-close:hover{background:var(--gold);color:#000;transform:rotate(90deg)}
+.lightbox-btn{position:absolute;top:50%;transform:translateY(-50%);width:50px;height:50px;border-radius:50%;background:rgba(10,10,10,.8);border:1.5px solid var(--gold);color:var(--gold);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.3s;z-index:10}
+.lightbox-btn:hover{background:var(--gold);color:#000}
+.lightbox-btn.prev{left:15px}
+.lightbox-btn.next{right:15px}
+.lightbox-counter{margin-top:20px;font-size:15px;font-weight:800;color:#aaa;background:rgba(255,255,255,.05);padding:8px 20px;border-radius:100px;border:1px solid rgba(201,162,39,.2)}
+.lightbox-counter span{color:var(--gold);font-size:18px;font-weight:900}
+
+/* ===== SECTION HEADINGS ===== */
+.section-head{display:flex;align-items:center;justify-content:center;gap:10px;color:var(--gold);font-size:19px;font-weight:900;margin:35px 0 20px;text-align:center}
+.section-head svg{width:24px;height:24px}
+
+/* ===== SOCIAL LINKS ===== */
+.links-container{display:flex;flex-direction:column;gap:14px;padding:0 18px;max-width:550px;margin:0 auto 45px}
+.link-card{background:var(--card-bg);border:1.5px solid rgba(201,162,39,.18);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:16px;text-decoration:none;transition:all .3s ease;box-shadow:0 4px 15px rgba(0,0,0,.25);position:relative;overflow:hidden}
+.link-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 10px 30px rgba(201,162,39,.12);background:#181818}
+.link-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#111;border:2px solid rgba(201,162,39,.35);flex-shrink:0;transition:.3s;position:relative;overflow:hidden}
+.link-card:hover .link-icon{border-color:var(--gold);box-shadow:0 0 15px rgba(201,162,39,.2)}
+.link-icon svg{width:24px;height:24px;color:var(--gold)}
+.link-info{flex:1;text-align:right}
+.link-info h5{font-size:17px;font-weight:800;color:#fff;margin-bottom:3px;letter-spacing:.3px}
+.link-info span{font-size:12px;color:#888;direction:ltr;display:block}
+
+/* ===== STORE VIEW ===== */
+#store-view{display:none;padding:35px 18px;background:#0a0a0a;min-height:100vh}
+#store-view.active{display:block}
+.store-welcome{text-align:center;margin-bottom:35px;padding:25px;background:linear-gradient(135deg,rgba(201,162,39,.06),transparent);border-radius:18px;border:1px solid rgba(201,162,39,.12);max-width:800px;margin-left:auto;margin-right:auto}
+.store-welcome h2{font-size:26px;font-weight:900;color:var(--gold);margin-bottom:8px}
+.store-welcome p{color:#888;font-size:14px}
+.filters{display:flex;justify-content:center;gap:10px;margin-bottom:30px;flex-wrap:wrap}
+.fil{padding:10px 22px;border:1.5px solid rgba(255,255,255,.08);background:transparent;border-radius:100px;cursor:pointer;font-weight:800;font-size:12px;color:#999;font-family:inherit;transition:.3s}
+.fil:hover{border-color:rgba(201,162,39,.3);color:var(--gold)}
+.fil.active{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#000;border-color:var(--gold);box-shadow:0 4px 15px rgba(201,162,39,.2)}
+.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;max-width:1200px;margin:0 auto}
+.p-card{background:var(--card-bg);border-radius:16px;overflow:hidden;border:1px solid rgba(255,255,255,.05);transition:.4s;position:relative}
+.p-card:hover{transform:translateY(-6px);border-color:rgba(201,162,39,.2);box-shadow:0 15px 35px rgba(0,0,0,.45)}
+.p-img{aspect-ratio:3/4;background:#1a1a1a;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.p-img img{width:100%;height:100%;object-fit:cover;transition:.5s}
+.p-card:hover .p-img img{transform:scale(1.06)}
+.p-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.5),transparent);opacity:0;transition:.3s;display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}
+.p-card:hover .p-img-overlay{opacity:1}
+.quick-view{background:var(--gold);color:#000;border:none;padding:10px 22px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer;transform:translateY(15px);transition:.3s}
+.p-card:hover .quick-view{transform:translateY(0)}
+.p-info{padding:16px}
+.p-cat{font-size:10px;color:var(--gold);font-weight:800;margin-bottom:5px;text-transform:uppercase;letter-spacing:1px}
+.p-name{font-size:14px;font-weight:800;margin-bottom:12px;color:#fff;line-height:1.4}
+.p-row{display:flex;align-items:center;justify-content:space-between}
+.p-price{font-size:17px;font-weight:900;color:var(--gold)}
+.add-btn{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#000;border:none;padding:9px 16px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;transition:.3s;display:flex;align-items:center;gap:5px}
+.add-btn:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(201,162,39,.3)}
+
+/* ===== PAGES ===== */
+.page-sec{display:none;padding:45px 22px;max-width:800px;margin:85px auto 0;line-height:1.9;color:#bbb}
+.page-sec.active{display:block}
+.page-sec h2{font-size:26px;color:#fff;margin-bottom:18px;border-bottom:3px solid var(--gold);padding-bottom:10px;display:inline-block;font-weight:900}
+.page-sec p{margin-bottom:16px;font-size:15px}
+.page-sec strong{color:var(--gold)}
+
+/* ===== FOOTER ===== */
+.footer{background:#050505;color:#666;padding:45px 20px 25px;text-align:center;border-top:2px solid rgba(201,162,39,.12);position:relative}
+.footer::before{content:'';position:absolute;top:-1px;left:50%;transform:translateX(-50%);width:80px;height:3px;background:var(--gold);border-radius:2px}
+.footer-logo{width:65px;height:65px;border-radius:50%;margin:0 auto 18px;padding:3px;background:linear-gradient(135deg,var(--gold),#fff,var(--gold));box-shadow:0 0 25px rgba(201,162,39,.25)}
+.footer-logo img{width:100%;height:100%;border-radius:50%;object-fit:cover;background:#111}
+.footer-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:2px}
+.footer-sub{color:var(--gold);font-size:12px;margin-bottom:22px}
+.footer-social{display:flex;justify-content:center;gap:18px;margin-bottom:25px}
+.footer-social a{width:45px;height:45px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.3s;text-decoration:none;border:2px solid transparent}
+.footer-social a:hover{transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,.3)}
+.footer-social a svg{width:20px;height:20px}
+.footer-copy{font-size:11px;color:#555;border-top:1px solid rgba(255,255,255,.04);padding-top:18px;margin-top:8px}
+
+/* ===== CART ===== */
+.cart-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:2000;opacity:0;visibility:hidden;transition:.3s}
+.cart-bg.open{opacity:1;visibility:visible}
+.cart-p{position:fixed;top:0;left:0;width:360px;max-width:90vw;height:100%;background:#111;color:#fff;z-index:2001;transform:translateX(-100%);transition:transform .4s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;border-right:2px solid var(--gold)}
+.cart-p.open{transform:translateX(0)}
+.cart-h{padding:18px;border-bottom:1px solid rgba(201,162,39,.15);display:flex;align-items:center;justify-content:space-between}
+.cart-h h3{font-size:17px;font-weight:900;color:var(--gold)}
+.cart-body{flex:1;overflow-y:auto;padding:18px}
+.cart-item{display:flex;gap:12px;padding:14px;background:#1a1a1a;border-radius:14px;margin-bottom:10px;border:1px solid rgba(255,255,255,.04);transition:.3s}
+.cart-item:hover{border-color:rgba(201,162,39,.15)}
+.cart-item-img{width:55px;height:55px;border-radius:10px;background:#222;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1}
+.cart-item-name{font-weight:800;font-size:13px;margin-bottom:3px}
+.cart-item-price{color:var(--gold);font-size:12px;font-weight:700}
+.cart-item-qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+.qty-btn{width:26px;height:26px;border-radius:6px;border:1px solid rgba(201,162,39,.25);background:transparent;color:var(--gold);cursor:pointer;font-weight:800;font-size:14px;transition:.2s;display:flex;align-items:center;justify-content:center}
+.qty-btn:hover{background:var(--gold);color:#000}
+.cart-item-qty span{font-weight:800;font-size:13px;min-width:18px;text-align:center}
+.remove-btn{background:none;border:none;color:#ff4444;cursor:pointer;font-size:11px;margin-top:6px;transition:.2s}
+.remove-btn:hover{color:#ff6666}
+.cart-f{padding:18px;border-top:1px solid rgba(201,162,39,.15);background:#0a0a0a}
+.co-btn{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#000;border:none;border-radius:12px;font-weight:900;cursor:pointer;font-family:inherit;font-size:15px;transition:.3s;box-shadow:0 4px 15px rgba(201,162,39,.2)}
+.co-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(201,162,39,.35)}
+.empty-cart{text-align:center;color:#555;margin-top:50px}
+.empty-cart svg{color:rgba(201,162,39,.2);margin-bottom:14px}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:640px){
+  .banner-container{height:260px}
+  .avatar-ring{width:130px;height:130px}
+  .store-title{font-size:24px}
+  .p-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .stats-row{gap:35px}
+  .btn{padding:12px 22px;font-size:13px}
+  .nfc-logo{width:130px;height:130px}
+  .nfc-text{font-size:22px}
+  .lightbox-btn{width:40px;height:40px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NFC SPLASH SCREEN ===== -->
+<div id="nfc-splash">
+  <div class="nfc-logo">
+    <img src="tag12.png" alt="TAGHAWSA" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=width:100%;height:100%;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;font-size:42px;font-weight:900;color:var(--gold)>T</div>'">
+  </div>
+  <div class="nfc-text">TAGHAWSA STORE</div>
+  <div class="nfc-bar"><div class="nfc-bar-inner"></div></div>
+</div>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <div class="nav-right">
+    <button class="menu-btn" onclick="toggleDrawer()" title="القائمة">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a href="#" class="logo" onclick="showPage('home')">
+      <img src="tag12.png" alt="T" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=width:38px;height:38px;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:#000;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;border:2px solid var(--gold)>T</span> TAGHAWSA'">
+      TAGHAWSA
+    </a>
+  </div>
+  <div class="actions" style="position:relative">
+    <button class="ic-btn" onclick="toggleCart()" title="السلة">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="badge" id="navCartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== DRAWER ===== -->
+<div class="drawer-bg" id="drawerBg" onclick="toggleDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div>
+    <div class="drawer-header">
+      <span style="font-weight:900;color:var(--gold);font-size:17px;letter-spacing:1px">القائمة الرئيسية</span>
+      <button class="drawer-close" onclick="toggleDrawer()"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <ul class="drawer-menu">
+      <li><a href="#" onclick="showPage('home'); toggleDrawer();">الرئيسية</a></li>
+      <li><a href="#" class="highlight" onclick="showPage('store'); toggleDrawer();">🛍️ تسوق الآن (المتجر)</a></li>
+      <li><a href="#" onclick="showPage('about'); toggleDrawer();">من نحن</a></li>
+      <li><a href="#" onclick="showPage('terms'); toggleDrawer();">شروط الاستخدام</a></li>
+      <li><a href="#" onclick="showPage('privacy'); toggleDrawer();">سياسة الخصوصية</a></li>
+    </ul>
+  </div>
+  <div style="font-size:11px;color:#555;text-align:center;font-weight:600">TAGHAWSA STORE © 2026</div>
+</div>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="home-view">
+  <div class="profile-header">
+    <div class="banner-container">
+      <img src="tag88.png" alt="Banner" class="banner-img" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,#1a1a1a,#0d0d0d)'">
+    </div>
+    <div class="avatar-wrap">
+      <div class="avatar-ring">
+        <img src="tag12.png" alt="TAGHAWSA" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=width:100%;height:100%;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:var(--gold)>T</div>'">
+        <div class="verified-badge" title="حساب موثوق">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        </div>
+      </div>
+    </div>
+    <h1 class="store-title">Taghawsa Store</h1>
+    <div class="store-handle">@taghawsa_store</div>
+    <p class="store-bio">
+      <span class="emoji">👔</span> ملابس جاهزة للرجال<br>
+      <span class="emoji">📍</span> إنزكان تغزوت قرب الصحة<br>
+      <span class="emoji">📞</span> Rachid: 0690379421
+    </p>
+    <div class="stats-row">
+      <div class="stat-item"><span class="stat-num">1,107</span><span class="stat-label">منشورات</span></div>
+      <div class="stat-item"><span class="stat-num">39 ألف</span><span class="stat-label">المتابعون</span></div>
+      <div class="stat-item"><span class="stat-num">29</span><span class="stat-label">متابعة</span></div>
+    </div>
+    <div class="action-btns">
+      <button class="btn btn-gold" onclick="showPage('store')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+        تصفح المنتجات
+      </button>
+      <a href="https://wa.me/212690379421" target="_blank" class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        واتساب
+      </a>
+      <!-- ===== NEW SOCIAL LINK BUTTON (GREEN) ===== -->
+      <a href="https://taghawsa.store" target="_blank" class="btn" style="background:#25D366;color:#fff;border:none;padding:13px 28px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-family:inherit;transition:.3s;box-shadow:0 4px 18px rgba(37,211,102,.25)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        الرابط
+      </a>
+    </div>
+  </div>
+
+  <!-- Marquee -->
+  <div class="marquee">
+    <div class="m-track">
+      <div class="m-item">✦ ملابس جاهزة للرجال</div>
+      <div class="m-item">✦ إنزكان تغزوت قرب الصحة</div>
+      <div class="m-item">✦ جودة وتصاميم عصرية</div>
+      <div class="m-item">✦ توصيل لجميع المدن</div>
+      <div class="m-item">✦ ملابس جاهزة للرجال</div>
+      <div class="m-item">✦ إنزكان تغزوت قرب الصحة</div>
+      <div class="m-item">✦ جودة وتصاميم عصرية</div>
+      <div class="m-item">✦ توصيل لجميع المدن</div>
+    </div>
+  </div>
+
+  <!-- ===== GALLERY TRIGGER CARD ===== -->
+  <div class="gallery-card-sec">
+    <div class="gallery-trigger-card" onclick="openLightbox(0)">
+      <div class="gallery-card-info">
+        <div class="gallery-icon-box">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </div>
+        <div class="gallery-text-box">
+          <h3>معرض الصور</h3>
+          <p>اضغط لعرض الصور بحجم كامل (6 صور)</p>
+        </div>
+      </div>
+      <div class="gallery-preview-thumbs">
+        <img src="sizo1.png" class="thumb-mini" alt="" onerror="this.style.display='none'">
+        <img src="sizo2.png" class="thumb-mini" alt="" onerror="this.style.display='none'">
+        <div class="thumb-count">+6</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX / FULLSCREEN MODAL -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="lightbox-content">
+      <button class="lightbox-btn prev" onclick="lbPrev()">❮</button>
+      <img src="" id="lightboxImg" class="lightbox-img" alt="عرض مكبر">
+      <button class="lightbox-btn next" onclick="lbNext()">❯</button>
+      <div class="lightbox-counter"><span id="lbCurrent">1</span> / 6</div>
+    </div>
+  </div>
+
+  <!-- Social Links -->
+  <div class="section-head">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    <span>روابط التواصل</span>
+  </div>
+  <div class="links-container">
+    <!-- Website - Gold -->
+    <a href="https://taghawsa.store" target="_blank" class="link-card">
+      <div class="link-icon" style="border-color:#c9a227;background:#c9a227;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </div>
+      <div class="link-info"><h5>Website</h5><span>taghawsa.store</span></div>
+    </a>
+    <!-- Instagram - Gradient -->
+    <a href="https://www.instagram.com/taghawsa__store" target="_blank" class="link-card">
+      <div class="link-icon" style="border-color:#E4405F;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </div>
+      <div class="link-info"><h5>Instagram</h5><span>instagram.com/taghawsa_store</span></div>
+    </a>
+    <!-- TikTok - Black -->
+    <a href="https://tiktok.com/@taghawsa_store" target="_blank" class="link-card">
+      <div class="link-icon" style="border-color:#000;background:#000;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+      </div>
+      <div class="link-info"><h5>TikTok</h5><span>tiktok.com/@taghawsa_store</span></div>
+    </a>
+    <!-- Facebook - Blue -->
+    <a href="https://www.facebook.com/profile.php?id=61550475535833" target="_blank" class="link-card">
+      <div class="link-icon" style="border-color:#1877F2;background:#1877F2;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </div>
+      <div class="link-info"><h5>Facebook</h5><span>facebook.com/taghawsa</span></div>
+    </a>
+    <!-- Location - Red -->
+    <a href="https://maps.app.goo.gl/HyUZeJHf8WMRqT5V6" target="_blank" class="link-card">
+      <div class="link-icon" style="border-color:#EA4335;background:#EA4335;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="link-info"><h5>Location</h5><span>إنزكان تغزوت</span></div>
+    </a>
+    <!-- WhatsApp - Green -->
+    <a href="https://wa.me/212690379421" target="_blank" class="link-card">
+      <div class="link-icon" style="border-color:#25D366;background:#25D366;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </div>
+      <div class="link-info"><h5>WhatsApp</h5><span>+212 690-379421</span></div>
+    </a>
+    <!-- Phone Call - Blue -->
+    <a href="tel:+212690379421" class="link-card">
+      <div class="link-icon" style="border-color:#34A853;background:#34A853;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <div class="link-info"><h5>Phone Call</h5><span>+212 690-379421</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- ===== STORE VIEW ===== -->
+<div id="store-view">
+  <div class="store-welcome">
+    <h2>🛍️ تشكيلة المنتجات</h2>
+    <p>اختر القسم المناسب واستمتع بتشكيلتنا المتنوعة</p>
+  </div>
+  <div class="filters">
+    <button class="fil active" onclick="filterCat('all', this)">الكل</button>
+    <button class="fil" onclick="filterCat('hauts', this)">الملابس العلوية (Hauts)</button>
+    <button class="fil" onclick="filterCat('pantalon', this)">السراويل (Pantalon)</button>
+    <button class="fil" onclick="filterCat('chaussures', this)">الأحذية (Chaussures)</button>
+  </div>
+  <div class="p-grid" id="productGrid"></div>
+</div>
+
+<!-- ===== PAGES ===== -->
+<div id="about-view" class="page-sec">
+  <h2>من نحن</h2>
+  <p>متجر <strong>Taghawsa Store</strong> هو وجهتك الأولى للأناقة الرجالية في مدينة إنزكان. نتخصص في تجارة الملابس الجاهزة للرجال بجميع أنواعها وأحجامها.</p>
+  <p>نقدم تشكيلة واسعة من القمصان والسراويل والأحذية والإكسسوارات بأجود الخامات وأحدث التصاميم العصرية.</p>
+  <p>📍 <strong>العنوان:</strong> إنزكان تغزوت قرب الصحة</p>
+  <p>📞 <strong>الهاتف:</strong> 0690379421 (Rachid)</p>
+</div>
+<div id="terms-view" class="page-sec">
+  <h2>شروط الاستخدام</h2>
+  <p>1. يتم تأكيد جميع المبيعات مباشرة عبر التواصل في الواتساب أو زيارة مقر المتجر.</p>
+  <p>2. الأسعار المعروضة شاملة الضريبة وقد تتغير دون إشعار مسبق.</p>
+  <p>3. التوصيل متوفر لجميع المدن المغربية بأسعار رمزية.</p>
+</div>
+<div id="privacy-view" class="page-sec">
+  <h2>سياسة الخصوصية</h2>
+  <p>نلتزم بحفظ بيانات الزبناء بشكل آمن وسرّي. لا نشارك معلوماتك مع أي طرف ثالث.</p>
+  <p>نستخدم بيانات الاتصال فقط لتأكيد الطلبات وتوفير أفضل خدمة.</p>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-logo">
+    <img src="tag12.png" alt="TAGHAWSA" onerror="this.style.display='none';this.parentElement.innerHTML='<div style=width:100%;height:100%;border-radius:50%;background:#111;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:900;color:var(--gold)>T</div>'">
+  </div>
+  <div class="footer-title">TAGHAWSA STORE</div>
+  <div class="footer-sub">ملابس جاهزة للرجال | إنزكان</div>
+  <div class="footer-social">
+    <!-- WhatsApp - Green -->
+    <a href="https://wa.me/212690379421" target="_blank" title="واتساب" style="border-color:#25D366;background:#25D366;color:#fff;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </a>
+    <!-- Instagram - Gradient -->
+    <a href="https://www.instagram.com/taghawsa__store" target="_blank" title="إنستغرام" style="border-color:#E4405F;background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+    </a>
+    <!-- Facebook - Blue -->
+    <a href="https://www.facebook.com/profile.php?id=61550475535833" target="_blank" title="فيسبوك" style="border-color:#1877F2;background:#1877F2;color:#fff;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+    </a>
+    <!-- Website - Gold -->
+    <a href="https://taghawsa.store" target="_blank" title="الرابط" style="border-color:#c9a227;background:#c9a227;color:#fff;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    </a>
+  </div>
+  <div class="footer-copy">© 2026 TAGHAWSA STORE. جميع الحقوق محفوظة - إنزكان تغزوت</div>
+</footer>
+
+<!-- ===== CART ===== -->
+<div class="cart-bg" id="cartBg" onclick="toggleCart()"></div>
+<div class="cart-p" id="cartP">
+  <div class="cart-h">
+    <h3>🛒 سلة التسوق</h3>
+    <button onclick="toggleCart()" style="background:none;border:none;color:#fff;cursor:pointer;padding:8px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="empty-cart">
+      <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <p>السلة فارغة حالياً</p>
+    </div>
+  </div>
+  <div class="cart-f" id="cartF" style="display:none">
+    <div style="display:flex;justify-content:space-between;margin-bottom:14px;font-weight:900;font-size:16px">
+      <span>المجموع:</span><span id="cTotal" style="color:var(--gold);font-size:18px">0 درهم</span>
+    </div>
+    <button class="co-btn" onclick="checkout()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:6px"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      إتمام الطلب عبر واتساب
+    </button>
+  </div>
+</div>
+
+<script>
+// ===== NFC SPLASH =====
+setTimeout(()=>{document.getElementById('nfc-splash').classList.add('hidden')},2500);
+
+// ===== LIGHTBOX & GALLERY LOGIC =====
+const galleryImages=['sizo1.png','sizo2.png','sizo3.png','sizo4.png','sizo5.png','sizo6.png'];
+let currentLbIndex=0;
+
+function openLightbox(idx){
+  currentLbIndex=idx;
+  updateLightboxImage();
+  document.getElementById('lightbox').classList.add('active');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('active');
+}
+function lbNext(){
+  currentLbIndex=(currentLbIndex+1)%galleryImages.length;
+  updateLightboxImage();
+}
+function lbPrev(){
+  currentLbIndex=(currentLbIndex-1+galleryImages.length)%galleryImages.length;
+  updateLightboxImage();
+}
+function updateLightboxImage(){
+  document.getElementById('lightboxImg').src=galleryImages[currentLbIndex];
+  document.getElementById('lbCurrent').textContent=currentLbIndex+1;
+}
+
+// Swipe Support for Lightbox
+let touchStartX=0;
+const lb=document.getElementById('lightbox');
+lb.addEventListener('touchstart',e=>touchStartX=e.changedTouches[0].screenX,{passive:true});
+lb.addEventListener('touchend',e=>{
+  const diff=touchStartX-e.changedTouches[0].screenX;
+  if(Math.abs(diff)>50){diff>0?lbNext():lbPrev();}
+},{passive:true});
+
+// ===== PRODUCTS =====
+const products=[
+  {id:1,name:"قميص كلاسيك أنيق",cat:"hauts",price:250,img:"tag1.png"},
+  {id:2,name:"سترة / تريكو عصري",cat:"hauts",price:300,img:"tag2.png"},
+  {id:3,name:"جاكيت شتوي فاخر",cat:"hauts",price:450,img:"tag3.png"},
+  {id:4,name:"سروال كلاسيك رسمي",cat:"pantalon",price:280,img:"how1.png"},
+  {id:5,name:"سروال عصري كاجوال",cat:"pantalon",price:260,img:"how2.png"},
+  {id:6,name:"سروال جينز مريح",cat:"pantalon",price:320,img:"how3.png"},
+  {id:7,name:"حذاء جلدي كلاسيك",cat:"chaussures",price:500,img:"stor1.png"},
+  {id:8,name:"حذاء رياضي عصري",cat:"chaussures",price:450,img:"stor2.png"},
+  {id:9,name:"حذاء رسمي فاخر",cat:"chaussures",price:600,img:"stor3.png"}
+];
+let cart=[];
+
+function getCatLabel(cat){
+  switch(cat){case'hauts':return'ملابس علوية';case'pantalon':return'سراويل';case'chaussures':return'أحذية';default:return'ملابس';}
+}
+
+function renderProducts(filter='all'){
+  const grid=document.getElementById('productGrid');
+  const items=filter==='all'?products:products.filter(p=>p.cat===filter);
+  grid.innerHTML=items.map(p=>`
+    <div class="p-card">
+      <div class="p-img">
+        <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none';this.parentElement.innerHTML='<svg style=width:45px;height:45px;opacity:.3 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10"/></svg>'">
+        <div class="p-img-overlay"><button class="quick-view" onclick="addToCart(${p.id})">أضف للسلة</button></div>
+      </div>
+      <div class="p-info">
+        <div class="p-cat">${getCatLabel(p.cat)}</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-row">
+          <span class="p-price">${p.price} درهم</span>
+          <button class="add-btn" onclick="addToCart(${p.id})"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>أضف</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterCat(cat,btn){
+  document.querySelectorAll('.fil').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+function showPage(pageId){
+  document.getElementById('home-view').style.display='none';
+  document.getElementById('store-view').classList.remove('active');
+  document.querySelectorAll('.page-sec').forEach(el=>el.classList.remove('active'));
+  if(pageId==='home'){document.getElementById('home-view').style.display='block';}
+  else if(pageId==='store'){document.getElementById('store-view').classList.add('active');renderProducts();}
+  else{document.getElementById(pageId+'-view').classList.add('active');}
+  window.scrollTo(0,0);
+}
+
+function toggleDrawer(){
+  document.getElementById('drawerBg').classList.toggle('open');
+  document.getElementById('drawer').classList.toggle('open');
+}
+function toggleCart(){
+  document.getElementById('cartBg').classList.toggle('open');
+  document.getElementById('cartP').classList.toggle('open');
+}
+
+function addToCart(id){
+  const p=products.find(x=>x.id===id);
+  const exist=cart.find(x=>x.id===id);
+  if(exist)exist.q++;else cart.push({...p,q:1});
+  updateCart();toggleCart();
+}
+function updateQty(id,delta){
+  const item=cart.find(x=>x.id===id);
+  if(!item)return;
+  item.q+=delta;
+  if(item.q<=0)cart=cart.filter(x=>x.id!==id);
+  updateCart();
+}
+function removeFromCart(id){
+  cart=cart.filter(x=>x.id!==id);
+  updateCart();
+}
+
+function updateCart(){
+  document.getElementById('navCartCount').textContent=cart.reduce((s,i)=>s+i.q,0);
+  const body=document.getElementById('cartBody');
+  const foot=document.getElementById('cartF');
+  if(cart.length===0){
+    body.innerHTML='<div class="empty-cart"><svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><p>السلة فارغة حالياً</p></div>';
+    foot.style.display='none';
+  }else{
+    body.innerHTML=cart.map(i=>`<div class="cart-item"><div class="cart-item-img"><img src="${i.img}" alt="" onerror="this.style.display='none'"></div><div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">${i.price} درهم</div><div class="cart-item-qty"><button class="qty-btn" onclick="updateQty(${i.id},-1)">−</button><span>${i.q}</span><button class="qty-btn" onclick="updateQty(${i.id},1)">+</button></div><button class="remove-btn" onclick="removeFromCart(${i.id})">حذف</button></div></div>`).join('');
+    const total=cart.reduce((s,i)=>s+(i.price*i.q),0);
+    document.getElementById('cTotal').textContent=total+' درهم';
+    foot.style.display='block';
+  }
+}
+
+function checkout(){
+  if(cart.length===0)return;
+  const text=cart.map(x=>`- ${x.name} (${x.q}x) = ${x.price*x.q} درهم`).join('\n');
+  const total=cart.reduce((s,x)=>s+x.price*x.q,0);
+  const msg=`مرحباً Taghawsa Store،\nأرغب في طلب التالي:\n\n${text}\n\nالمجموع الكلي: ${total} درهم\n\nجزاكم الله خيراً 🙏`;
+  window.open(`https://wa.me/212690379421?text=${encodeURIComponent(msg)}`,'_blank');
+}
+</script>
+</body>
+  </html>
